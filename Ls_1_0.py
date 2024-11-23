@@ -22,7 +22,9 @@ async def on_ready():
 
 """
 1. 使用一個事件處理器
-2. 當機器人收到一個訊息時，執行程式碼
+2. 避免機器人回覆自己的訊息
+3. 當機器人收到一個開頭為「你好」的訊息時，執行程式碼
+4. 檢查訊息是否為前綴指令的訊息
 """
 @client.event 
 async def on_message(message):
@@ -30,7 +32,7 @@ async def on_message(message):
     if message.author == client.user: # 避免機器人自己回覆自己
         return
     
-    if message.content.startswith(f'<@!{client.user.id}> ') or message.content.startswith(f'<@{client.user.id}> '): # 當機器人被提及時
+    if message.content.startswith('你好'): # 當機器人被提及時
         await message.channel.send('Hello!') # 回覆訊息 
 
     await client.process_commands(message) # 處理指令
@@ -39,7 +41,7 @@ async def on_message(message):
 1. 使用一個指令處理器
 2. 當機器人收到一個開頭為「!」前綴符號的訊息時，尋找匹配指令名稱並執行
 """
-@client.command()
+@client.command(name= 'test' , help = '測試指令') 
 async def test(ctx):
     await ctx.send('Hello!')
 
