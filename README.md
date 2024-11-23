@@ -10,7 +10,7 @@ import discord; discord.Client(intents=discord.Intents.default()).run("你的機
 
 這篇有以下兩個主題，可善用`ctrl+F`搜尋你想要的內容  
 - Discord機器人偵測訊息
-- 前綴指令使用
+- 前綴指令使用  
 可能有人會覺得只有兩個很少，但這兩個已經可以延伸出超多東西了  
 > 這篇只會教基本的，請放心
 
