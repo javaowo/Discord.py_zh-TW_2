@@ -7,7 +7,7 @@ import discord; discord.Client(intents=discord.Intents.default()).run("你的機
 ```
 嗯對，一行指令便能啟動機器人  
 看來我還是太小看python的簡化力量了（  
----
+
 這篇有以下兩個主題，可善用`ctrl+F`搜尋你想要的內容  
 - Discord機器人偵測訊息
 - 前綴指令使用
