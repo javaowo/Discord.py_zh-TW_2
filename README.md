@@ -24,7 +24,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    if message.content.startswith(f'<@!{client.user.id}> ') or message.content.startswith(f'<@{client.user.id}> '):
+    if message.content.startswith('你好'):
         await message.channel.send('Hello!')
 
     await client.process_commands(message)
@@ -41,13 +41,12 @@ async def on_message(message):
    - 這段程式碼意味著「當傳送訊息的人是機器人本身時，不執行以下的程式碼」  
      所以這幾行通常會放在整個`on_message`的程式串最上方，讓機器人不會進入死循環
 
-3. `<@!{client.user.id}>`跟`<@{client.user.id}>`差在哪？這個if條件又有什麼作用？
-   - `<@!{client.user.id}>`是當機器人在伺服器有暱稱時所帶有的格式，`<@{client.user.id}>`這個則是機器人原名稱帶有的格式（如在私訊中或是機器人在伺服器中沒有暱稱時）
-   - 這段程式碼意味著「當機器人被標註時，傳送一條訊息至該頻道」
-   - `message.channel.send`指的是「傳送訊息到觸發機器人執行工作的訊息的頻道」，這段文字看起來很饒舌，簡而言之就是「你從哪裡叫他，他就從哪裡回你」的概念
+3. 第二個if條件是什麼意思？
    - `message.content.startswith`指的是「當訊息的開頭為...」
+   - `message.channel.send`指的是「傳送訊息到觸發機器人執行工作的訊息的頻道」，這段文字看起來很饒舌，簡而言之就是「你從哪裡叫他，他就從哪裡回你」的概念
+   - 所以這段程式碼的意思是：「當訊息的開頭為『你好』時，傳送一條訊息」
   
-4. 最後一行的await是在等什麼？
+5. 最後一行的await是在等什麼？
    - `process_commands`會檢查此訊息是否為前綴指令，通常會放在最後一行，以保證前面的條件式不會被這行的檢查覆蓋
    - 如果沒有這行程式碼，那麼所有前綴指令將**全部**無法運作
 
@@ -81,13 +80,13 @@ async def on_ready():
 @client.event 
 async def on_message(message):
 
-    if message.author == client.user: # 避免機器人自己回覆自己
+    if message.author == client.user: 
         return
     
-    if message.content.startswith(f'<@!{client.user.id}> ') or message.content.startswith(f'<@{client.user.id}> '): # 當機器人被提及時
-        await message.channel.send('Hello!') # 回覆訊息 
+    if message.content.startswith('你好'): 
+        await message.channel.send('Hello!') 
 
-    await client.process_commands(message) # 處理指令
+    await client.process_commands(message) 
 
 @client.command(name= 'test' , help = '測試指令') 
 async def test(ctx):
