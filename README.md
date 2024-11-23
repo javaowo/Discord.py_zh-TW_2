@@ -45,6 +45,53 @@ async def on_message(message):
    - `<@!{client.user.id}>`是當機器人在伺服器有暱稱時所帶有的格式，`<@{client.user.id}>`這個則是機器人原名稱帶有的格式（如在私訊中或是機器人在伺服器中沒有暱稱時）
    - 這段程式碼意味著「當機器人被標註時，傳送一條訊息至該頻道」
    - `message.channel.send`指的是「傳送訊息到觸發機器人執行工作的訊息的頻道」，這段文字看起來很饒舌，簡而言之就是「你從哪裡叫他，他就從哪裡回你」的概念
+   - `message.content.startswith`指的是「當訊息的開頭為...」
+  
 4. 最後一行的await是在等什麼？
    - `process_commands`會檢查此訊息是否為前綴指令，通常會放在最後一行，以保證前面的條件式不會被這行的檢查覆蓋
    - 如果沒有這行程式碼，那麼所有前綴指令將**全部**無法運作
+
+## 前綴指令使用
+1. 這東西跟斜線指令不一樣，看你`command_prefix`裡面寫什麼訊息開頭就要寫什麼
+2. 每個機器人都內建一個「!help」查詢可用指令，記得，那個「!」是根據你`command_prefix`裡面打的東西決定什麼開頭接help
+   > 假設你的前綴開頭是`command_prefix='&'`，那你就要輸入「&help」來做查詢
+
+下面來解釋一下這幾行程式碼在幹嘛
+```
+@client.command(name= 'test' , help = '測試指令') 
+async def test(ctx):
+    await ctx.send('Hello!')
+```
+1. 前綴指令名稱：test，透過「!test」來呼叫程式
+2. name跟help可以不用寫，那個只是在你使用「!help」會顯示的東西，如果不打指令名稱會預設為「async def」後面的那個
+3. `ctx.send`邏輯跟上面的`message.channel.send`一樣
+  
+把它全部結合起來你就會得到這樣一個東西：
+```python
+import discord
+from discord.ext import commands
+
+client = commands.Bot(command_prefix='!',intents=discord.Intents.all())
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+    print(f'My ID is {client.user.id}')
+
+@client.event 
+async def on_message(message):
+
+    if message.author == client.user: # 避免機器人自己回覆自己
+        return
+    
+    if message.content.startswith(f'<@!{client.user.id}> ') or message.content.startswith(f'<@{client.user.id}> '): # 當機器人被提及時
+        await message.channel.send('Hello!') # 回覆訊息 
+
+    await client.process_commands(message) # 處理指令
+
+@client.command(name= 'test' , help = '測試指令') 
+async def test(ctx):
+    await ctx.send('Hello!')
+
+client.run("YOUR_BOT_TOKEN")
+```
