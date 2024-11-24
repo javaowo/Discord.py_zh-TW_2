@@ -57,7 +57,7 @@ async def on_message(message):
    > 假設你的前綴開頭是`command_prefix='&'`，那你就要輸入「&help」來做查詢
 
 下面來解釋一下這幾行程式碼在幹嘛
-```
+```python
 @client.command(name= 'test' , help = '測試指令') 
 async def test(ctx):
     await ctx.send('Hello!')
